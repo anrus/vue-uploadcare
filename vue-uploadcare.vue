@@ -1,5 +1,5 @@
 <template>
-  <input type="hidden">
+  <input v-bind="$props" type="hidden">
 </template>
 
 <script>
@@ -7,9 +7,11 @@
   
   export default {
     props: {
-      url: {
-        required: true
-      }
+      value: {
+        type: String,
+        required: false,
+        default: ""
+      },
     },
     data() {
       return {
@@ -24,28 +26,24 @@
       uploadcareUrl() {
         this.updatePropUrl();
       },
-      url() {
+      value() {
         this.updateWidgetValue();
       }
     },
     methods: {
-
-      initWidget() {
+      initWidget() {       
         this.widget = uploadcare.Widget(this.$el);
         this.updateWidgetValue();
-
         this.widget.onUploadComplete((info) => {
           this.uploadcareUrl = info.cdnUrl;
         });
       },
-      
       updatePropUrl() {
         this.$emit('update:url', this.uploadcareUrl);
       },
-
       updateWidgetValue() {
-        this.widget && this.widget.value(this.url);
-      }
+        this.widget && this.widget.value(this.value);
+      },
     }
   };
 </script>
